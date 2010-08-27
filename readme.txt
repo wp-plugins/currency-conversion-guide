@@ -1,7 +1,7 @@
 === Currency Conversion Guide ===
 Contributors: fx-rate.net
 Donate link: http://www.fx-rate.net/
-Tags: currency conversion, currency conversion guide, currency conversion sheet, EUR, USD, CAD, GBP, USD, dollar, euro, sterling conversion
+Tags: currency conversion, currency conversion guide, currency conversion sheet, currency calculation guide, EUR, USD, CAD, GBP, USD, dollar, euro
 Tested up to: 2.9.1
 Requires at least: 1.5
 Stable tag: 1.0

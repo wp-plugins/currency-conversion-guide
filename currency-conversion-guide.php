@@ -8,8 +8,6 @@ Author URI: http://fx-rate.net
 Plugin URI: http://fx-rate.net/wordpress-currency-conversion-guide-plugin/
 */
 
-
-
 function currency_conversion_guide_init() 
 {
 
@@ -34,7 +32,6 @@ function currency_conversion_guide_init()
 		$currency_list = unserialize($currency_list_ser);
         }
 
-#	if(true)
     	if ( empty($newoptions) )
 	{
 	   $options_flag=1;
