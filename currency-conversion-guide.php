@@ -2,7 +2,7 @@
 /*
 Plugin Name: Currency Conversion Guide
 Description: Currency Conversion Guide displays a table of to and from currency values, allows a quick lookup of conversion values. Any currencies in the world.
-Author: fx-rate.net
+Author: enclick
 Version: 1.0
 Author URI: http://fx-rate.net
 Plugin URI: http://fx-rate.net/wordpress-currency-conversion-guide-plugin/
