@@ -1,5 +1,5 @@
 === Currency Conversion Guide ===
-Contributors: fx-rate.net
+Contributors: enclick
 Donate link: http://www.fx-rate.net/
 Tags: currency conversion, currency conversion guide, currency conversion sheet, currency calculation guide, EUR, USD, CAD, GBP, USD, dollar, euro
 Tested up to: 3.0.1
