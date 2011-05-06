@@ -25,6 +25,7 @@ Currency conversion sheet provides a table with conversion values to quickly loo
 
 1. Example Conversion Guide - vertical layout
 2. Example Conversion Guide - horizontal layout
+3. Admin panel 
 
 == Changelog ==
 
