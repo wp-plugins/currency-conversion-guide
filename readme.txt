@@ -4,7 +4,7 @@ Donate link: http://www.fx-rate.net/
 Tags: currency conversion, currency conversion guide, currency conversion sheet, currency calculation guide, EUR, USD, CAD, GBP, USD, dollar, euro
 Tested up to: 3.0.1
 Requires at least: 1.5
-Stable tag: 1.0
+Stable tag: 1.1
 
 == Description ==
 
