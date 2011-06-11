@@ -1,16 +1,16 @@
 === Currency Conversion Guide ===
-Contributors: fx-rate.net
+Contributors: enclick
 Donate link: http://www.fx-rate.net/
-Tags: currency conversion, currency conversion guide, currency conversion sheet, EUR, USD, CAD, GBP, USD, dollar, euro, sterling conversion
-Tested up to: 2.9.1
-Requires at least: 1.5
-Stable tag: 1.0
+Tags: currency, currency calculator, currency conversion, dollar, EUR, euro, exchange, foreign exchange conversion, fx rate converter, GBP, euro conversion, sterling conversion, USD, exchange rates
+Tested up to: 3.0.1
+Requires at least: 2.8
+Stable tag: 1.1
 
 == Description ==
 
-Currency conversion sheet provides a table with conversion values to quickly lookup conversion between two currencies. The plugin provides size and layout options.
+Quicker than a Currency Calculator. Currency conversion guide is a cheat sheet to lookup significant values, e.g. 10, 20, 30, 50, 80, 100 of one currency in another.
 
-* Select two currencies for the conversion; to and from currencies
+* The plugin provides color, size and layout controls..
 * Updated once a day from central banks and government institutions
 
 == Installation ==
@@ -20,13 +20,20 @@ Currency conversion sheet provides a table with conversion values to quickly loo
 3. Go to Plugins > Installed, and activate the plugin,
 4. Go to Appearance > Widgets, and drag the widget to a sidebar,
 5. Select your currency, and the size and other currency options
+6. Please email us any problems to widgets at fx-rate.net, we appreciate the help in improving the plugin
+7. If you find the widget useful, please take the time to rate our plugin. Thank you.
 
 == Screenshots ==
 
 1. Example Conversion Guide - vertical layout
 2. Example Conversion Guide - horizontal layout
+3. Admin panel 
 
 == Changelog ==
+
+= 1.1 =
+* Released 11/06/2011
+* Upgraded internal programming to allow multiple widgets on sidebar, for improved admin panel response, and compatibility with Wordpress in the future
 
 = 1.0 =
 * Released 18/08/2010 
@@ -38,5 +45,15 @@ Currency conversion sheet provides a table with conversion values to quickly loo
 = How frequently are the values updated? =
 The table values are updated once a day GMT from central bank and financial institution sources. 
 
+= Can I paste multiple converters, for different currencies? =
+Version 2.1 onwards allows multiple currency converters on the same sidebar.
+
+
+= Can I paste the currency conversion sheet into a post ? =
+Yes, javascript code is available directly from [fx-rate.net](http://fx-rate.net/). You have to paste the javascript into the post in HTML mode.
+
 = Is there support  ? = 
 Further support is available at [fx-rate.net/support](http://fx-rate.net/wordpress-currency-conversion-guide-plugin/) or email widgets at fx-rate.net
+
+= Email = 
+Please email any problems or suggestions to widgets at fx-rate.net
