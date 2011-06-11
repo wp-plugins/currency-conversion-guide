@@ -1,171 +1,242 @@
 <?php
 /*
 Plugin Name: Currency Conversion Guide
-Description: Currency Conversion Guide displays a table of to and from currency values, allows a quick lookup of conversion values. Any currencies in the world.
+Description: Quicker than a Currency Calculator. Currency conversion guide is a cheat sheet to lookup significant values, e.g. 10, 20, 30, 50, 80, 100 of one currency in another.
 Author: enclick
-Version: 1.0
+Version: 1.1
 Author URI: http://fx-rate.net
 Plugin URI: http://fx-rate.net/wordpress-currency-conversion-guide-plugin/
 */
 
-function currency_conversion_guide_init() 
+
+require_once("functions.php");
+static $currency_list;
+
+/**
+ * Add function to widgets_init that'll load our widget.
+ */
+
+add_action( 'widgets_init', 'load_currency_conversion_guide' );
+
+/**
+ * Register our widget.
+ * 'currency_conversion_guide' is the widget class used below.
+ *
+ */
+function load_currency_conversion_guide() {
+        register_widget( 'currency_conversion_guide' );
+}
+
+
+/*******************************************************************************************
+*
+*       Currency Conversion Guide  class.
+*       This class handles everything that needs to be handled with the widget:
+*       the settings, form, display, and update.
+*
+*********************************************************************************************/
+class currency_conversion_guide extends WP_Widget
 {
 
+  /*******************************************************************************************
+      *
+      *
+      * Widget setup.
+      *
+      *
+      ********************************************************************************************/
+      function currency_conversion_guide() {
+                #Widget settings
 
-     if ( !function_exists('register_sidebar_widget') || !function_exists('register_widget_control') )
-    	   return; 
+                $widget_ops = array( 'description' => __('Quicker than a Currency Calculator', 'currency_conveter') );
 
-    function currency_conversion_guide_control() 
-    {
+                #Widget control settings
+                $control_ops = array( 'width' => 200, 'height' => 550, 'id_base' => 'currency_conversion_guide' );
 
-        $newoptions = get_option('currency_conversion_guide');
-    	$options = $newoptions;
-	$options_flag=0;
+                #Create the widget
+                $this->WP_Widget( 'currency_conversion_guide', __('Currency Conversion Sheet', 'currency_conversion_guide'), $widget_ops, $control_ops );
+        }
 
-      	if(empty($currency_list)){
-		$file_location = dirname(__FILE__)."/currencies.ser"; 
-		if ($fd = fopen($file_location,'r')){
-	   	   $currency_list_ser = fread($fd,filesize($file_location));
-	   	   fclose($fd);
+
+	/*******************************************************************************************
+        *
+        *
+        * Update the widget settings.
+        *
+        *
+        *******************************************************************************************/
+        function update( $new_instance, $old_instance )
+        {
+		if(empty($currency_list)){
+                        $file_location = dirname(__FILE__)."/currencies.ser";
+                        if ($fd = fopen($file_location,'r')){
+                           $currency_list_ser = fread($fd,filesize($file_location));
+                           fclose($fd);
+                        }
+                        $currency_list = array();
+                        $currency_list = unserialize($currency_list_ser);
+                }
+
+                $instance = $old_instance;
+
+	      	$currency_code1 = strip_tags(stripslashes($new_instance['currency_code1']));
+	      	$currency_code2 = strip_tags(stripslashes($new_instance['currency_code2']));
+              	$instance['currency_code1'] = $currency_code1;
+	      	$instance['currency_name1'] = strip_tags(stripslashes($currency_list[$currency_code1]['currency_name']));
+	      	$instance['country_code1'] = strip_tags(stripslashes($currency_list[$currency_code1]['country_code']));
+              	$instance['currency_code2'] = $currency_code2;
+	      	$instance['currency_name2'] = strip_tags(stripslashes($currency_list[$currency_code2]['currency_name']));
+	      	$instance['country_code2'] = strip_tags(stripslashes($currency_list[$currency_code2]['country_code']));
+              	$instance['layout'] = strip_tags(stripslashes($new_instance['layout']));
+              	$instance['title'] = $currency_name1 . " to ". $currency_name2 ;
+              	$instance['width'] = strip_tags(stripslashes($new_instance['width']));
+              	$instance['text_color'] = strip_tags(stripslashes($new_instance['text_color']));
+              	$instance['border_color'] = strip_tags(stripslashes($new_instance['border_color']));
+              	$instance['background_color'] = strip_tags(stripslashes($new_instance['background_color']));
+              	$instance['transparent_flag'] = strip_tags(stripslashes($new_instance['transparent_flag']));
+
+                return $instance;
+        }
+
+
+   	/*****************************************************************************************
+	 *
+         *      Displays the widget settings controls on the widget panel.
+         *      Make use of the get_field_id() and get_field_name() function
+         *      when creating your form elements. This handles the confusing stuff.
+         *
+         *
+         ********************************************************************************************/
+        function form( $instance )
+        {
+
+                #
+                #       Set up some default widget settings
+                #
+
+      		if(empty($currency_list)){
+			$file_location = dirname(__FILE__)."/currencies.ser"; 
+			if ($fd = fopen($file_location,'r')){
+	   	   	   $currency_list_ser = fread($fd,filesize($file_location));
+	   	   	   fclose($fd);
+			}
+			$currency_list = array();
+			$currency_list = unserialize($currency_list_ser);
+        	}
+
+
+      	   	$default = array(
+	   		 'currency_code1'=>'EUR',
+	   		 'currency_name1'=>'Euro',
+	   		 'currency_code2'=>'USD',
+	   		 'currency_name2'=>'American Dollar',
+	   		 'title'=>'Euro to American Dollar',
+           		 'country_code1' => 'EU',
+           		 'country_code2' => 'US',
+   			 'layout' => 'vertical',
+           		 'width' => '150',
+           		 'text_color' => '#000000',
+           		 'border_color' => '#BBBBBB',
+           		 'background_color' => '#FFFFFF',
+           		 'transparent_flag'=>'0'
+	  	);
+
+      	   	if(empty($instance['currency_code1'])){
+			$instance = $default;
 		}
-		$currency_list = array();
-		$currency_list = unserialize($currency_list_ser);
-        }
-
-    	if ( empty($newoptions) )
-	{
-	   $options_flag=1;
-      	   $newoptions = array(
-	   	'currency_code1'=>'EUR',
-	   	'currency_name1'=>'Euro',
-	   	'currency_code2'=>'USD',
-	   	'currency_name2'=>'American Dollar',
-	   	'title'=>'Euro to American Dollar Conversion',
-           	'country_code1' => 'EU',
-           	'country_code2' => 'US',
-   		'layout' => 'vertical',
-           	'width' => '150',
-           	'text_color' => '#000000',
-           	'border_color' => '#BBBBBB',
-           	'background_color' => '#FFFFFF',
-           	'transparentflag'=>'0'
-	   );
-	}
-
-	if ( $_POST['currency-conversion-guide-submit'] ) {
-	     $options_flag=1;
-	      $currency_code1 = strip_tags(stripslashes($_POST['currency-conversion-guide-currency-code1']));
-	      $currency_code2 = strip_tags(stripslashes($_POST['currency-conversion-guide-currency-code2']));
-              $newoptions['currency_code1'] = $currency_code1;
-	      $newoptions['currency_name1'] = $currency_list[$currency_code1]['currency_name'];
-	      $newoptions['country_code1'] = $currency_list[$currency_code1]['country_code'];
-              $newoptions['currency_code2'] = $currency_code2;
-	      $newoptions['currency_name2'] = $currency_list[$currency_code2]['currency_name'];
-	      $newoptions['country_code2'] = $currency_list[$currency_code2]['country_code'];
-              $newoptions['layout'] = strip_tags(stripslashes($_POST['currency-conversion-guide-layout']));
-              $newoptions['title'] = $currency_name1 . " to ". $currency_name2 ;
-              $newoptions['width'] = strip_tags(stripslashes($_POST['currency-conversion-guide-width']));
-              $newoptions['text_color'] = strip_tags(stripslashes($_POST['currency-conversion-guide-text-color']));
-              $newoptions['border_color'] = strip_tags(stripslashes($_POST['currency-conversion-guide-border-color']));
-              $newoptions['background_color'] = strip_tags(stripslashes($_POST['currency-conversion-guide-background-color']));
-              $newoptions['transparentflag'] = strip_tags(stripslashes($_POST['currency-conversion-guide-transparent-flag']));
-        }
 
 
-      	if ( $options_flag ==1 ) {
-              $options = $newoptions;
-              update_option('currency_conversion_guide', $options);
-      	}
+		// Extract value from vars
+      		$currency_code1 = htmlspecialchars($instance['currency_code1'], ENT_QUOTES);
+		$currency_name1 = htmlspecialchars($instance['currency_name1'], ENT_QUOTES);
+      		$currency_code2 = htmlspecialchars($instance['currency_code2'], ENT_QUOTES);
+		$currency_name2 = htmlspecialchars($instance['currency_name2'], ENT_QUOTES);
+		$title = $currency_name1  . " to " . $currency_name2;
+      		$country_code1 = htmlspecialchars($instance['country_code1'], ENT_QUOTES);
+      		$country_code2 = htmlspecialchars($instance['country_code2'], ENT_QUOTES);
+      		$layout = htmlspecialchars($instance['layout'], ENT_QUOTES);
+      		$width = htmlspecialchars($instance['width'], ENT_QUOTES);
+      		$text_color = htmlspecialchars($instance['text_color'], ENT_QUOTES);
+      		$border_color = htmlspecialchars($instance['border_color'], ENT_QUOTES);
+      		$background_color = htmlspecialchars($instance['background_color'], ENT_QUOTES);
+      		$transparent_flag = htmlspecialchars($instance['transparent_flag'], ENT_QUOTES);
 
-      	// Extract value from vars
-      	$currency_code1 = htmlspecialchars($options['currency_code1'], ENT_QUOTES);
-	$currency_name1 = htmlspecialchars($options['currency_name1'], ENT_QUOTES);
-      	$currency_code2 = htmlspecialchars($options['currency_code2'], ENT_QUOTES);
-	$currency_name2 = htmlspecialchars($options['currency_name2'], ENT_QUOTES);
-	$title = $currency_name1  . " to " . $currency_name2;
-      	$country_code1 = htmlspecialchars($options['country_code1'], ENT_QUOTES);
-      	$country_code2 = htmlspecialchars($options['country_code2'], ENT_QUOTES);
-      	$layout = htmlspecialchars($options['layout'], ENT_QUOTES);
-      	$width = htmlspecialchars($options['width'], ENT_QUOTES);
-      	$text_color = htmlspecialchars($options['text_color'], ENT_QUOTES);
-      	$border_color = htmlspecialchars($options['border_color'], ENT_QUOTES);
-      	$background_color = htmlspecialchars($options['background_color'], ENT_QUOTES);
-      	$transparentflag = htmlspecialchars($options['transparentflag'], ENT_QUOTES);
-
-      	echo '<ul><li style="text-align:center;list-style: none;"><label for="currency-conversion-guide-title">Currency Conversion Guide<br> by <a href="http://fx-rate.net">fx-rate.net</a></label></li>';
-
-       	// Get currency, length and label type 
+       		#
+                #
+                #       START FORM OUTPUT
+                #
+                #
 
 
-       	echo '<li style="list-style: none;"><label for="currency-conversion-guide-currency-code1">From Currency:'.
-               '<select id="currency-conversion-guide-currency-code1" name="currency-conversion-guide-currency-code1" style="width:125px">';
+      		echo ' <div style="align:center;text-align:center;margin-bottom:10px">Currency Conversion Guide<br> by <a href="http://fx-rate.net">fx-rate.net</a></div>';
+
+       		// Get currency, length and label type 
+
+       	echo '<p><label for="' .$this->get_field_id( 'currency_code1' ). '">From Currency:'.
+               '<select id="' .$this->get_field_id( 'currency_code1' ). '" name="' .$this->get_field_name( 'currency_code1' ). '" style="width:125px">';
       	echo '<OPTION value=""></option>';
      	ccg_print_thecurrency_list($currency_code1, $currency_list);
-      	echo '</select></label></li>';
+      	echo '</select></label></p>';
 
 
-       	echo '<li style="list-style: none;"><label for="currency-conversion-guide-currency-code2">To Currency:'.
-               '<select id="currency-conversion-guide-currency-code2" name="currency-conversion-guide-currency-code2" style="width:125px">';
+       	echo '<p><label for="' .$this->get_field_id( 'currency_code2' ). '">To Currency:'.
+               '<select id="' .$this->get_field_id( 'currency_code2' ). '" name="' .$this->get_field_name( 'currency_code2' ). '" style="width:125px">';
       	echo '<OPTION value=""></option>';
      	ccg_print_thecurrency_list($currency_code2, $currency_list);
-      	echo '</select></label></li>';
+      	echo '</select></label></p>';
 
       	// Set layout type
-      	echo '<li style="list-style: none;"><label for="currency-conversion-guide-label-type">'.'Layout:&nbsp;&nbsp;';
-       	echo '<select id="currency-conversion-guide-layout" name="currency-conversion-guide-layout"  style="width:120px" >';
+      	echo '<p><label for="' .$this->get_field_id( 'layout' ). '">'.'Layout:&nbsp;&nbsp;';
+       	echo '<select id="' .$this->get_field_id( 'layout' ). '" name="' .$this->get_field_name( 'layout' ). '" style="width:120px" >';
       	ccg_print_layout_list($layout);
       	echo '</select></label>';
-      	echo '</li>';
+      	echo '</p>';
 
 
       	// Set Width
 	echo "\n";
-      	echo '<li style="list-style: none;text-align:bottom"><label for="currency-conversion-guide-width">'.'Width: &nbsp;&nbsp;&nbsp;'.
-         '<select id="currency-conversion-guide-width" name="currency-conversion-guide-width"  style="width:75px">';
+      	echo '<p><label for="' .$this->get_field_id( 'width' ). '">'.'Width: &nbsp;&nbsp;&nbsp;'.
+         '<select id="' .$this->get_field_id( 'width' ). '" name="' .$this->get_field_name( 'width' ). '" style="width:75px">';
       	ccg_print_thewidth_list($width);
-      	echo '</select></label></li>';
+      	echo '</select></label></p>';
 
       	// Set Text Widget color
-      	echo '<li style="list-style: none;"><label for="currency-conversion-guide-text-color">'.'Text Color: &nbsp;&nbsp;&nbsp;&nbsp;';
-       	echo '<select id="currency-conversion-guide-text-color" name="currency-conversion-guide-text-color"  style="width:95px" >';
+      	echo '<p><label for="' .$this->get_field_id( 'text_color' ). '">'.'Text Color: &nbsp;&nbsp;&nbsp;&nbsp;';
+       	echo '<select id="' .$this->get_field_id( 'text_color' ). '" name="' .$this->get_field_name( 'text_color' ). '" style="width:95px" >';
       	ccg_print_textcolor_list($text_color);
       	echo '</select></label>';
-      	echo '</li>';
+      	echo '</p>';
 
       	// Set Border Widget color
-      	echo '<li style="list-style: none;"><label for="currency-conversion-guide-border-color">'.'Header Color:&nbsp;';
-       	echo '<select id="currency-conversion-guide-border-color" name="currency-conversion-guide-border-color"  style="width:95px" >';
+      	echo '<p><label for="' .$this->get_field_id( 'border_color' ). '">'.'Header Color:&nbsp;';
+       	echo '<select id="' .$this->get_field_id( 'border_color' ). '" name="' .$this->get_field_name( 'border_color' ). '" style="width:95px" >';
       	ccg_print_bordercolor_list($border_color);
       	echo '</select></label>';
-      	echo '</li>';
+      	echo '</p>';
 
       	// Set Background Widget color
-      	echo '<li style="list-style: none;"><label for="currency-conversion-guide-background-color">'.'Background Color:&nbsp;';
-       	echo '<select id="currency-conversion-guide-background-color" name="currency-conversion-guide-background-color"  style="width:95px" >';
+      	echo '<p><label for="' .$this->get_field_id( 'background_color' ). '">'.'Background Color:&nbsp;';
+       	echo '<select id="' .$this->get_field_id( 'background_color' ). '" name="' .$this->get_field_name( 'background_color' ). '" style="width:95px" >';
       	ccg_print_backgroundcolor_list($background_color);
       	echo '</select></label>';
-      	echo '</li>';
+      	echo '</p>';
 
 
 	//   Transparent option
 
 	$transparent_checked = "";
-	if ($transparentflag =="1")
+	if ($transparent_flag =="1")
 	   $transparent_checked = "CHECKED";
 	echo "\n";
-        echo '<li style="list-style: none;"><label for="currency-conversion-guide-transparent-flag"> Transparent: 
-	<input type="checkbox" id="currency-conversion-guide-transparent-flag" name="currency-conversion-guide-transparent-flag" value=1 '.$transparent_checked.' /> 
-	</label></li>';
+        echo '<p><label for="' .$this->get_field_id( 'transparent_flag' ). '"> Transparent: 
+	<input type="checkbox" id="' .$this->get_field_id( 'transparent_flag' ). '" name="' .$this->get_field_name( 'transparent_flag' ). '" value=1 '.$transparent_checked.' /> 
+	</label></p>';
 
+	// hidden title init
 
-      	// Hidden "OK" button
-      	echo '<label for="currency-conversion-guide-submit">';
-      	echo '<input id="currency-conversion-guide-submit" name="currency-conversion-guide-submit" type="hidden" value="Ok" />';
-      	echo '</label>';
+        echo '<label for="' .$this->get_field_id( 'title' ). '">';
+	echo ' <input type="hidden" id="' .$this->get_field_id( 'title' ). '" name="' .$this->get_field_name( 'title' ). '" value="'.$title.'" /> </label>';
 
-        echo '<label for="currency-conversion-guide-title"> <input type="hidden" id="currency-conversion-guide-title" name="currency-conversion-guide-title" value="'.$title.'" /> </label>';
-
-	echo '</ul>';
 
 
     }
@@ -177,31 +248,31 @@ function currency_conversion_guide_init()
     //
     /////////////////////////////////////////////////////////////////////////////////////////////////////
 
-     function currency_conversion_guide($args) 
+     function widget($args, $instance) 
      {
+
 
 	// Get values 
       	extract($args);
 
-      	$options = get_option('currency_conversion_guide');
-
       	// Extract value from vars
-      	$currency_code1 = htmlspecialchars($options['currency_code1'], ENT_QUOTES);
-	$currency_name1 = htmlspecialchars($options['currency_name1'], ENT_QUOTES);
-      	$currency_code2 = htmlspecialchars($options['currency_code2'], ENT_QUOTES);
-	$currency_name2 = htmlspecialchars($options['currency_name2'], ENT_QUOTES);
+      	$currency_code1 = htmlspecialchars($instance['currency_code1'], ENT_QUOTES);
+	$currency_name1 = htmlspecialchars($instance['currency_name1'], ENT_QUOTES);
+      	$currency_code2 = htmlspecialchars($instance['currency_code2'], ENT_QUOTES);
+	$currency_name2 = htmlspecialchars($instance['currency_name2'], ENT_QUOTES);
 	$title = $currency_name1 . " to " . $currency_name2 . " Conversion";
-      	$country_code1 = htmlspecialchars($options['country_code1'], ENT_QUOTES);
-      	$country_code2 = htmlspecialchars($options['country_code2'], ENT_QUOTES);
-      	$layout = htmlspecialchars($options['layout'], ENT_QUOTES);
-      	$width = htmlspecialchars($options['width'], ENT_QUOTES);
-      	$text_color = htmlspecialchars($options['text_color'], ENT_QUOTES);
-      	$border_color = htmlspecialchars($options['border_color'], ENT_QUOTES);
-      	$background_color = htmlspecialchars($options['background_color'], ENT_QUOTES);
-      	$transparentflag = htmlspecialchars($options['transparentflag'], ENT_QUOTES);
+	$title0 = $currency_name1 . " to " . $currency_name2 ;
+      	$country_code1 = htmlspecialchars($instance['country_code1'], ENT_QUOTES);
+      	$country_code2 = htmlspecialchars($instance['country_code2'], ENT_QUOTES);
+      	$layout = htmlspecialchars($instance['layout'], ENT_QUOTES);
+      	$width = htmlspecialchars($instance['width'], ENT_QUOTES);
+      	$text_color = htmlspecialchars($instance['text_color'], ENT_QUOTES);
+      	$border_color = htmlspecialchars($instance['border_color'], ENT_QUOTES);
+      	$background_color = htmlspecialchars($instance['background_color'], ENT_QUOTES);
+      	$transparent_flag = htmlspecialchars($instance['transparent_flag'], ENT_QUOTES);
 
 
-	if($transparentflag == "1"){
+	if($transparent_flag == "1"){
   	     $background_color ="";
   	     $border_color ="";
 	}
@@ -215,7 +286,7 @@ function currency_conversion_guide_init()
 
 
 	// Output title
-	echo $before_title . $title . $after_title; 
+	echo $before_title . $title0 . $after_title; 
 	
 
 	// Output calculator
@@ -229,7 +300,6 @@ function currency_conversion_guide_init()
 
 
 
-
 	$target_url= "http://fx-rate.net/$currency_code1/$currency_code2/";
 	
 	$tsize=12;
@@ -240,8 +310,8 @@ function currency_conversion_guide_init()
 #
 
 
-	echo '<!-Currency Conversion Guide widget - HTML code - fx-rates.net -->
-<div  style="width:'.$width.'px; background-color:'.$background_color.';border:2px solid #888;text-align:center;margin: 0px; padding: 0px;margin-top:10px!important">';
+	echo '<!-Currency Conversion Guide widget - HTML code - fx-rates.net -->';
+	echo'<div  style="width:'.$width.'px; background-color:'.$background_color.';border:2px solid #888;text-align:center;margin:auto; padding: 0px 0px;margin-top:15px!important">';
 
 	echo '<div style="margin: 0px; padding: 0px;text-align:center;align:center;background-color:'.$border_color. ';border-bottom:1px solid #888;width:100%">
  	     <a style="font-size:'.$tsize.'px!important;line-height:16px!important;font-family:arial;text-weight:bold;margin-bottom:6px;text-decoration:none;color:#'.$text_color.'" href="'.$target_url.'">';
@@ -253,19 +323,9 @@ function currency_conversion_guide_init()
 
 
     }
-  
-    register_sidebar_widget('Currency Conversion Guide', 'currency_conversion_guide');
-    register_widget_control('Currency Conversion Guide', 'currency_conversion_guide_control', 245, 300);
-
 
 }
 
-
-add_action('plugins_loaded', 'currency_conversion_guide_init');
-
-
-
-include("functions.php");
 
 
 ?>
