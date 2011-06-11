@@ -25,9 +25,12 @@ Quicker than a Currency Calculator. Currency conversion guide is a cheat sheet t
 
 == Screenshots ==
 
-1. Example Conversion Guide - vertical layout
-2. Example Conversion Guide - horizontal layout
-3. Admin panel 
+1. Euro to British Pound Guide, vertical layout, green colour choice 
+2. US Dollar to British Pound Guide, vertical layout, narrow width, gold colour choice 
+3. US Dollar to Canada Dollar  Guide, vertical layout, narrow width, white colour choice 
+4. US Dollar to Australi Dollar  Guide, horizontal layout, white colour choice 
+5. British Pound to Euro Guide, horizontal layout, green colour choice 
+6. Admin panel 
 
 == Changelog ==
 
