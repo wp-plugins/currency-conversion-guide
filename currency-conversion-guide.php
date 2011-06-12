@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Currency Conversion Guide
-Description: Quicker than a Currency Calculator. Currency conversion guide is a cheat sheet to lookup significant values, e.g. 10, 20, 30, 50, 80, 100 of one currency in another.
+Description: Quicker than a Currency Calculator. Currency conversion guide is a cheat sheet to quickly lookup conversion of rounded values, e.g. 10, 20, 30.
 Author: enclick
 Version: 1.1
 Author URI: http://fx-rate.net

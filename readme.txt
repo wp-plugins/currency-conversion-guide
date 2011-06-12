@@ -8,7 +8,7 @@ Stable tag: 1.1
 
 == Description ==
 
-Quicker than a Currency Calculator. Currency conversion guide is a cheat sheet to lookup significant values, e.g. 10, 20, 30, 50, 80, 100 of one currency in another.
+Quicker than a Currency Calculator. Currency conversion guide is a cheat sheet to quickly lookup conversion of rounded values, e.g. 10, 20, 30.
 
 * The plugin provides color, size and layout controls..
 * Updated once a day from central banks and government institutions
