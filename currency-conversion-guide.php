@@ -135,7 +135,7 @@ class currency_conversion_guide extends WP_Widget
 			'country_code1' => 'EU',
 			'country_code2' => 'US',
 			'layout' => 'vertical',
-			'width' => '150',
+			'width' => '180',
 			'text_color' => '#000000',
 			'border_color' => '#BBBBBB',
 			'background_color' => '#FFFFFF',
@@ -238,7 +238,7 @@ class currency_conversion_guide extends WP_Widget
 	     	$title_checked = "CHECKED";
 
 		echo "\n";
-		echo '<p><label for="' .$this->get_field_id( 'tflag' ). '"> Link to ' . $currency_code1 . "/" . $currency_code2 . 'page: 
+		echo '<p><label for="' .$this->get_field_id( 'tflag' ). '"> Widget Title: 
 	     <input type="checkbox" id="' .$this->get_field_id( 'tflag' ). '" name="' .$this->get_field_name( 'tflag' ). '" value=1 '.$title_checked.' /> 
 	     </label></p>';
 
@@ -298,7 +298,8 @@ class currency_conversion_guide extends WP_Widget
 
 
 		// Output title
-		echo $before_title . $title0 . $after_title; 
+		#echo $before_title . $title0 . $after_title; 
+		echo $before_title . $after_title; 
 	
 
 		// Output calculator
