@@ -4,7 +4,7 @@ Donate link: http://www.fx-rate.net/
 Tags: currency, currency calculator, currency conversion, dollar, EUR, euro, exchange, foreign exchange conversion, fx rate converter, GBP, euro conversion, sterling conversion, USD, exchange rates
 Tested up to: 3.0.1
 Requires at least: 2.8
-Stable tag: 1.1
+Stable tag: 1.2
 
 == Description ==
 
