@@ -2,13 +2,13 @@
 Contributors: enclick
 Donate link: http://www.fx-rate.net/
 Tags: currency, currency calculator, currency conversion, dollar, EUR, euro, exchange, foreign exchange conversion, fx rate converter, GBP, euro conversion, sterling conversion, USD, exchange rates
-Tested up to: 3.0.1
+Tested up to: 3.4
 Requires at least: 2.8
-Stable tag: 1.1
+Stable tag: 1.2
 
 == Description ==
 
-Quicker than a Currency Calculator. Currency conversion guide is a cheat sheet to lookup significant values, e.g. 10, 20, 30, 50, 80, 100 of one currency in another.
+Faster than a Currency Calculator. Currency conversion guide is a cheat sheet to quickly lookup conversion of rounded values, e.g. 10, 20, 30.
 
 * The plugin provides color, size and layout controls..
 * Updated once a day from central banks and government institutions
@@ -25,11 +25,19 @@ Quicker than a Currency Calculator. Currency conversion guide is a cheat sheet t
 
 == Screenshots ==
 
-1. Example Conversion Guide - vertical layout
-2. Example Conversion Guide - horizontal layout
-3. Admin panel 
+1. Euro to British Pound Guide, vertical layout, green colour choice 
+2. US Dollar to British Pound Guide, vertical layout, narrow width, gold colour choice 
+3. US Dollar to Canada Dollar  Guide, vertical layout, narrow width, white colour choice 
+4. US Dollar to Australi Dollar  Guide, horizontal layout, white colour choice 
+5. British Pound to Euro Guide, horizontal layout, green colour choice 
+6. Admin panel 
 
 == Changelog ==
+= 1.2 =
+* Released 14/06/2012
+* In detail compliance with Wordpress Plugin Guidelines
+* Flag images are now included in the plugin
+* Plugin makes one call to an external site for real time exchange rate data
 
 = 1.1 =
 * Released 11/06/2011
